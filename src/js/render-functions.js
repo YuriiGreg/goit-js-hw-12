@@ -1,5 +1,7 @@
-import SimpleLightbox from "simplelightbox";
-import "simplelightbox/dist/simple-lightbox.min.css";
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
+
+let lightbox;
 
 export function renderImages(images, gallery) {
   const markup = images.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => `
@@ -14,17 +16,46 @@ export function renderImages(images, gallery) {
         <p><b>Downloads</b> ${downloads}</p>
       </div>
     </li>
-  `).join("");
-  
-  gallery.innerHTML = markup;
+  `).join('');
 
-  const lightbox = new SimpleLightbox(".gallery a");
-  lightbox.refresh();
+  gallery.insertAdjacentHTML('beforeend', markup);
+
+  if (!lightbox) {
+    lightbox = new SimpleLightbox('.gallery a');
+  } else {
+    lightbox.refresh();
+  }
 }
 
 export function clearGallery(gallery) {
-  gallery.innerHTML = "";
+  gallery.innerHTML = '';
 }
 
+export function hideLoadMoreButton() {
+  document.querySelector('.load-more').classList.add('hidden');
+}
+
+export function showLoadMoreButton() {
+  document.querySelector('.load-more').classList.remove('hidden');
+}
+
+export function displayEndOfResultsMessage() {
+  document.querySelector('.end-of-results').classList.remove('hidden');
+}
+
+export function hideEndOfResultsMessage() {
+  document.querySelector('.end-of-results').classList.add('hidden');
+}
+
+export function smoothScroll() {
+  const { height: cardHeight } = document
+    .querySelector('.gallery')
+    .firstElementChild.getBoundingClientRect();
+
+  window.scrollBy({
+    top: cardHeight * 2,
+    behavior: 'smooth',
+  });
+}
 
 

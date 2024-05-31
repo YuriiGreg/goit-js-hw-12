@@ -1,15 +1,27 @@
-const API_KEY = "44034856-409a23e11e96e3af40ee90684";
-const BASE_URL = "https://pixabay.com/api/";
+import axios from 'axios';
 
-export async function fetchImages(query) {
-  const response = await fetch(`${BASE_URL}?key=${API_KEY}&q=${query}&image_type=photo&orientation=horizontal&safesearch=true`);
-  if (!response.ok) {
-    throw new Error("Network response was not ok");
+const API_KEY = '44034856-409a23e11e96e3af40ee90684';
+const BASE_URL = 'https://pixabay.com/api/';
+
+export async function fetchImages(query, page = 1, perPage = 15) {
+  try {
+    const response = await axios.get(BASE_URL, {
+      params: {
+        key: API_KEY,
+        q: query,
+        image_type: 'photo',
+        orientation: 'horizontal',
+        safesearch: true,
+        page,
+        per_page: perPage,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching images:', error);
+    throw error;
   }
-  const data = await response.json();
-  return data;
 }
-
 
 
 
